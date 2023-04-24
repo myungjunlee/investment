@@ -46,5 +46,4 @@ def ohlcv_data():
     return final_df
 
 trading_df=ohlcv_data()
-print(trading_df)
 trading_df.to_sql("bitcoin1d", con, index=False, if_exists='replace')
