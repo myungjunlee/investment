@@ -29,13 +29,7 @@ class MyStrategy(bt.Strategy):
         self.datahigh = self.datas[0].high
         self.dataopen = self.datas[0].open
         self.datavolume = self.datas[0].volume
-
-        # self.SMA5 = bt.indicators.MovingAverageSimple(self.data1, period=5) # 5일 이평선
-        # self.SMA5 = bt.indicators.MovingAverageSimple(self.data1, period=5) # 5일 이평선
-        # self.SMA8 = bt.indicators.MovingAverageSimple(self.data1, period=8) # 8일 이평선
-        # self.SMA18 = bt.indicators.MovingAverageSimple(self.data1, period=18) # 18일 이평선
-        # self.SMA20 = bt.indicators.MovingAverageSimple(self.data1, period=20) # 20일 이평선
-        # self.SMA25 = bt.indicators.MovingAverageSimple(self.data1, period=25) # 25일 이평선
+        
         self.SMA65 = bt.indicators.MovingAverageSimple(self.data1, period=65) # 65일 이평선
 
         self.pre_value = 0
@@ -58,10 +52,6 @@ class MyStrategy(bt.Strategy):
         self.sma20 = 0
         self.sma25 = 0
         self.sma65 = 0
-
-        # self.sma2 = 0
-        # self.sma6 = 0
-        # self.sma18 = 0
 
         self.lev = 10
         self.short_lev = 3
@@ -106,14 +96,12 @@ class MyStrategy(bt.Strategy):
         if len(self.buy_order) == 0 and self.holding == 0 and self.target > 0:
 
             if (self.datahigh[0] > self.target) and (sma5 < self.target or sma8 < self.target or sma20 < self.target):
-            # if (self.datahigh[0] > self.target) and (sma2 < self.target):
                 self.pre_value = self.broker.getvalue()
                 self.buy(size=math.floor((self.broker.getcash()*self.lev/2)/self.dataclose[0]/(1+0.0004*self.lev)))
                 print(self.data.datetime.datetime(), self.dataclose[0])
                 self.signal = 1
 
             elif (self.datalow[0] < self.short_target) and (self.short_target < sma25 or self.short_target < sma65):
-            # elif (self.datalow[0] < self.short_target) and (self.short_target < sma6 or self.short_target < sma18):
                 self.pre_value = self.broker.getvalue()
                 self.sell(size=math.floor((self.broker.getcash()*self.short_lev/2)/self.dataclose[0]/(1+0.0004*self.short_lev)))
                 self.signal = -1
@@ -143,10 +131,6 @@ class MyStrategy(bt.Strategy):
                 self.sma25 = 0
                 self.sma65 = 0
 
-                # self.sma2 = 0
-                # self.sma6 = 0
-                # self.sma18 = 0
-
                 for i in range(-64,0):
                     self.sma65 += self.data1.close[i]
                     if i > -25:
@@ -158,23 +142,10 @@ class MyStrategy(bt.Strategy):
                     if i > -5:
                         self.sma5 += self.data1.close[i]
 
-                # for i in range(-17,0):
-                #     self.sma18 += self.data1.close[i]
-                #     if i > -6:
-                #         self.sma6 += self.data1.close[i]
-                #     if i > -2:
-                #         self.sma2 += self.data1.close[i]
-
-                # print('-- {} Reset high and low'.format(self.data.datetime.datetime()))
                 self.range = (self.data1.high[-1] - self.data1.low[-1])*0.65
                 self.short_range = (self.data1.high[-1] - self.data1.low[-1])*0.6
-                # self.range = (self.data1.high[-1] - self.data1.low[-1])*0.6
-                # self.short_range = (self.data1.high[-1] - self.data1.low[-1])*0.65
                 self.target = self.data1.open[0] + self.range
                 self.short_target = self.data1.open[0] - self.short_range
-
-
-        # print('strategy notify_timer with when {}'.format(when))
         
     def notify_trade(self, trade):
 
@@ -297,7 +268,4 @@ if __name__ == "__main__":
 
     cerebro.run()  # run it all
 
-    wb.save('./bitcoin/breakout_strategy/lev10_2_1.xlsx')
-    # wb.save('./bitcoin/breakout_strategy/eth5_2.xlsx')
-
-    print("done!")
+    wb.save('./output.xlsx')
