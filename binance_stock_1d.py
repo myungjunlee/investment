@@ -23,9 +23,7 @@ def ohlcv_data():
             start_date = to_mstimestamp('2017-01-01 00:00:00')
         else:
             start_date = to_mstimestamp(str(input_date + datetime.timedelta(days=1)))
-        # end_date = to_mstimestamp('2017-12-31 23:59:59')
         ohlcv = binance.fetch_ohlcv('BTC/USDT', timeframe='1d', since=start_date, limit=1000)
-        # ohlcv = binance_usdm.fetch_ohlcv('BTC/USDT', timeframe='1m', since=start_date, limit=1000, params={'endTime':end_date})
 
         df = pd.DataFrame(ohlcv, columns=['Date', 'Open', 'High', 'Low', 'Close', 'Volume'])
         df['Date'] = pd.to_datetime(df['Date'], unit='ms') + datetime.timedelta(hours=9)
