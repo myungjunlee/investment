@@ -1,8 +1,7 @@
 import pandas as pd
 
 # 읽어올 엑셀 파일 지정
-filename = './bitcoin/breakout_strategy/future_complete/lev10_2_1.xlsx'
-# filename = './bitcoin/breakout_strategy/eth/eth5_2.xlsx'
+filename = './output.xlsx'
 
 # 엑셀 파일 읽어 오기
 df = pd.read_excel(filename, engine='openpyxl')
@@ -96,5 +95,4 @@ for i in range(2017,2025):
             stat_df = pd.DataFrame([stat_list], columns=column_list)
             total_df = pd.concat([total_df,stat_df],axis=0, ignore_index=True)
     
-# total_df.to_excel("./bitcoin/breakout_strategy/eth/monthstat_eth5_2.xlsx", index=False)
-total_df.to_excel("./bitcoin/breakout_strategy/future_complete/lev10_2_1/monthstat_lev10_2_1.xlsx", index=False)
+total_df.to_excel("./monthstat_output.xlsx", index=False)
